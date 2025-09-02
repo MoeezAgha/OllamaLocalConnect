@@ -1,21 +1,84 @@
 ﻿@inherits LayoutComponentBase
+@inject ThemeService ThemeService
+
+
+<RadzenTheme Theme="material" @rendermode="RenderMode.InteractiveAuto" />
 
 <RadzenComponents @rendermode="RenderMode.InteractiveAuto" />
 
-<PageTitle>OllamaLocalConnect</PageTitle>
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+<RadzenLayout>
+    <RadzenHeader>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Style="width:100%">
 
-        <article class="content px-4">
+            <!-- Left side -->
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="10">
+                <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" />
+                <RadzenLabel Text="Header" />
+            </RadzenStack>
+
+            <!-- Right side -->
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="10">
+                <RadzenLabel Text="Theme" Component="DropDownBindValue" />
+                <RadzenDropDown Name="ThemeDropDown" TValue="string" Value="@SelectedTheme"  ValueChanged="@ChangeTheme" Data="@listOfTheme">
+                </RadzenDropDown>
+            </RadzenStack>
+
+        </RadzenStack>
+    </RadzenHeader>
+
+
+    <RadzenSidebar Responsive="false" Style="width: max-content">
+        <RadzenPanelMenu DisplayStyle="@(sidebarExpanded? MenuItemDisplayStyle.IconAndText: MenuItemDisplayStyle.Icon)" ShowArrow="false">
+            <RadzenPanelMenuItem Text="Overview" Icon="home" />
+            <RadzenPanelMenuItem Text="Dashboard" Icon="dashboard" />
+            <RadzenPanelMenuItem Text="UI Fundamentals" Icon="auto_awesome">
+                <RadzenPanelMenuItem Text="Themes" Icon="color_lens" />
+                <RadzenPanelMenuItem Text="Colors" Icon="invert_colors" />
+            </RadzenPanelMenuItem>
+        </RadzenPanelMenu>
+    </RadzenSidebar>
+    <RadzenBody>
+        <div class="rz-p-4">
             @Body
-        </article>
-    </main>
-</div>
+        </div>
+    </RadzenBody>
+    <RadzenFooter>
+        Footer
+    </RadzenFooter>
+</RadzenLayout>
+
+@code {
+    bool sidebarExpanded = true;
+}
+@code {
+
+
+    public List<string> listOfTheme { get; set; } = new List<string>
+    {
+        "material",
+        "material-dark",
+        "standard",
+        "standard-dark",
+        "default",
+        "humanistic",
+        "humanistic-dark",
+        "software-dark",
+        "software"
+    };
+    public string SelectedTheme { get; set; } = string.Empty;
+
+    void ChangeTheme(string value)
+    {
+        ThemeService.SetTheme(value);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        SelectedTheme = "material";
+
+        await base.OnInitializedAsync();
+
+    
+    }
+}
