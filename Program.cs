@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using OllamaLocalConnect.Data;
+using Radzen;
 
 namespace OllamaLocalConnect
 {
@@ -14,6 +15,7 @@ namespace OllamaLocalConnect
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
             builder.Services.AddSingleton<WeatherForecastService>();
+            builder.Services.AddRadzenComponents();
 
             var app = builder.Build();
 
